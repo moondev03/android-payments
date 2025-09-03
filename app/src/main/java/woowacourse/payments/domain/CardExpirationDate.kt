@@ -4,10 +4,10 @@ import java.time.YearMonth
 
 @JvmInline
 value class CardExpirationDate private constructor(
-    val yearMonth: YearMonth,
+    val value: YearMonth,
 ) {
     init {
-        require(validFutureOrCurrentMonth(yearMonth)) { ERROR_INVALID_DATE }
+        require(validFutureOrCurrentMonth(value)) { ERROR_INVALID_DATE }
     }
 
     private fun validFutureOrCurrentMonth(

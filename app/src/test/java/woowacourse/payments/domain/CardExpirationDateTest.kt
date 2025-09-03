@@ -16,7 +16,7 @@ class CardExpirationDateTest {
         val actual = CardExpirationDate.of(month = month, year = year)
 
         // then
-        assertSoftly(actual.yearMonth) {
+        assertSoftly(actual.value) {
             this.year shouldBe year
             this.monthValue shouldBe month
         }
