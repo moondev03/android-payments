@@ -6,20 +6,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
-@JvmInline
-value class CardNumber(
-    val value: String,
-) {
-    init {
-        require(value.length == REQUIRE_CARD_NUMBER_LENGTH) { ERROR_INVALID_LENGTH }
-    }
-
-    companion object {
-        private const val REQUIRE_CARD_NUMBER_LENGTH = 16
-        private const val ERROR_INVALID_LENGTH = "카드번호는 16자리여야 합니다."
-    }
-}
-
 class CardNumberTest {
     @Test
     fun `카드번호는 16자리이다`() {
@@ -43,7 +29,29 @@ class CardNumberTest {
         ],
     )
     fun `카드번호는 16자리가 넘으면 예외가 발생한다`(number: String) {
-        // when & then
-        shouldThrow<IllegalArgumentException> { CardNumber(number) }
+        // when
+        val actual = shouldThrow<IllegalArgumentException> { CardNumber(number) }.message
+        val expected = "카드번호는 16자리여야 합니다."
+
+        // then
+        actual shouldBe expected
+    }
+
+    @ParameterizedTest
+    @ValueSource(
+        strings = [
+            "abcdefghijklmnop",
+            "                ",
+            "123412341234123a",
+            "12341234!2341234",
+        ],
+    )
+    fun `카드번호는 숫자가 아닌 문자가 포함될 경우 예외가 발생한다`(number: String) {
+        // when
+        val actual = shouldThrow<IllegalArgumentException> { CardNumber(number) }.message
+        val expected = "카드번호는 숫자로만 구성되어야 합니다."
+
+        // then
+        actual shouldBe expected
     }
 }
